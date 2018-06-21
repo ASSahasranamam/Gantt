@@ -110,30 +110,35 @@ gantt.attachEvent("onAfterTaskAdd", function(id,item){
    items = gantt.serialize().data
   console.log(items)
   app1.message=items;
+  drawChart()
 });
 
 gantt.attachEvent("onAfterTaskUpdate", function(id,item){
    items = gantt.serialize().data
   console.log(items)
   app1.message=items;
+  drawChart()
 });
 
 gantt.attachEvent("onAfterTaskDrag", function(id,item){
    items = gantt.serialize().data
   console.log(items)
   app1.message=items;
+  drawChart()
 });
 
 gantt.attachEvent("onAfterTaskDelete", function(id,item){
    items = gantt.serialize().data
   console.log(items)
   app1.message=items;
+  drawChart()
 });
 
 gantt.attachEvent("onAfterTaskMove", function(id,item){
    items = gantt.serialize().data
   console.log(items)
   app1.message=items;
+  drawChart()
 });
 
 //GChart timeline
@@ -152,9 +157,16 @@ var sampArr =[];
   var len = items.length;
   for (item of gantt.serialize().data) {
 
-    console.log([item.text, new Date(item.start_date),new Date(item.end_date)]);
+    var srtD = item.start_date[0] + item.start_date[1];
+    var srtM = item.start_date[3] + item.start_date[4];
+    var srtY = item.start_date[6] + item.start_date[7] + item.start_date[8] + item.start_date[9];
 
-    sampArr.push([item.text, new Date(item.start_date), new Date(item.end_date)])
+    var endD = item.end_date[0] + item.end_date[1];
+    var endM = item.end_date[3] + item.end_date[4];
+    var endY = item.end_date[6] + item.end_date[7] + item.end_date[8] + item.end_date[9];
+    console.log([item.text, new Date(srtY, srtM, srtD),new Date(endY, endM, endD)]);
+
+    sampArr.push([item.text, new Date(srtY, srtM, srtD),new Date(endY, endM, endD)])
 
   }
   console.log(sampArr)
