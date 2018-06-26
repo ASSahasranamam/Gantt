@@ -44,7 +44,7 @@
 <body>
 
   <div id="visualization"style='width:100%; ;'> </div>
-    <div id="timeline" style=" min-height: 180px; height:auto; weight: 100%; padding:10px"></div>
+    <div id="timeline" style=" min-height: 180px; height:auto; width:100%; padding:10px"></div>
 
     <div id="gantt_here" style='width:100%; height:50vh;'></div>
     <div id="app-1">{{message}}</div>
@@ -59,7 +59,7 @@
     				progress: 0.4, open: true
     			},
     			{
-    				id: 2, text: "Task #1", start_date: "02-04-2018", duration: 8, order: 10,
+    				id: 2, text: "Task #1", holder: "yolo", start_date: "02-04-2018", duration: 8, order: 10,
     				progress: 0.6, parent: 1
     			},
     			{
@@ -83,13 +83,20 @@
 //DisplayGnatt
 
 var container = document.getElementById('visualization');
+
+
+gantt.config.columns =  [
+    {name:"text",       label:"Task name",  tree:true, width:"*" },
+    {name:"holder",     label:"Holder",     align:"center" },
+    {name:"start_date", label:"Start time", align:"center" },
+    {name:"end_date",   label:"End date",   align:"center" },
+    {name:"progress",   label:"Progress",   align:"center" },
+    {name:"sample",     label:"custom",     align:"center"},
+    {name:"add", label:"", width:44 }
+
+];
 gantt.config.highlight_critical_path = true;
-
-
-
       gantt.init("gantt_here");
-
-
       gantt.parse(tasks);
 
 //initial JSON DATA storage
@@ -144,12 +151,14 @@ gantt.attachEvent("onAfterTaskMove", function(id,item){
 //GChart timeline
 google.charts.load('current', {'packages':['timeline']});
 google.charts.setOnLoadCallback(drawChart);
+
 function drawChart() {
   var container = document.getElementById('timeline');
   var chart = new google.visualization.Timeline(container);
   var dataTable = new google.visualization.DataTable();
 
   dataTable.addColumn({ type: 'string', id: 'TaskName' });
+  dataTable.addColumn({ type: 'string', id: 'name' });
   dataTable.addColumn({ type: 'date', id: 'Start' });
   dataTable.addColumn({ type: 'date', id: 'End' });
 
@@ -164,30 +173,17 @@ var sampArr =[];
     var endD = item.end_date[0] + item.end_date[1];
     var endM = item.end_date[3] + item.end_date[4];
     var endY = item.end_date[6] + item.end_date[7] + item.end_date[8] + item.end_date[9];
-    console.log([item.text, new Date(srtY, srtM, srtD),new Date(endY, endM, endD)]);
+  //  console.log([item.text, new Date(srtY, srtM, srtD),new Date(endY, endM, endD)]);
 
-    sampArr.push([item.text, new Date(srtY, srtM, srtD),new Date(endY, endM, endD)])
+    sampArr.push([item.text, item.text, new Date(srtY, srtM, srtD),new Date(endY, endM, endD)])
 
   }
   console.log(sampArr)
+
   dataTable.addRows(sampArr);
-
-  // dataTable.addRows([
-  //   [ 'Washington', new Date(1789, 3, 30), new Date(1797, 2, 4) ],
-  //   [ 'Adams',      new Date(1797, 2, 4),  new Date(1801, 2, 4) ],
-  //   [ 'Jefferson',  new Date(1801, 2, 4),  new Date(1809, 2, 4) ]]);
-
   chart.draw(dataTable);
 }
-
-      // Function returns the product of a and b
-
-
     </script>
-
-<!-- <button onclick="myFunction()">HELLO</button> -->
-
-
 
   </body>
 </html>
